@@ -1,7 +1,7 @@
 function love.conf(t)
   t.title = 'HEART'
-  t.author = 'Stephen Altamirano'
+  t.author = 'Team Awesome'
   t.identity = 'heart'
-  t.screen.width = 400
-  t.screen.height = 600
+  t.screen.width = 850
+  t.screen.height = 700
 end
