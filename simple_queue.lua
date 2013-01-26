@@ -36,10 +36,16 @@ local function pop(self)
   return ret
 end
 
+
+local function peek(self)
+  return self.items[self.head]
+end
+
 init(SimpleQueue)
 SimpleQueue.init = init
 SimpleQueue.add = add
 SimpleQueue.is_empty = is_empty
 SimpleQueue.pop = pop
+SimpleQueue.peek = peek
 
 return SimpleQueue
