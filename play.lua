@@ -1,7 +1,7 @@
 local state_manager = require 'state_manager'
 local play = state_manager:register('play')
 
-local key = {3, 1, 2, 4, 0}
+local key = {4, 2, 3, 5, 1}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local selection_index = 1
