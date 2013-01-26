@@ -10,12 +10,6 @@ local total_time = 0
 local teeth = 0
 local rest_time = 5
 
--- CONSTANTS
-local PIN_WIDTH = 40
-local PIN_HEIGHT = 4 * PIN_WIDTH
-local PIN_SPACING = PIN_WIDTH * 1.5
-local PIN_DY = PIN_WIDTH / 2
-local RESTING_PIN_OFFSET = 60
 
 function play:keyreleased(k)
   if k == 'left' then
