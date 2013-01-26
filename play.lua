@@ -118,21 +118,32 @@ function play:draw()
   love.graphics.setColor(255, 0, 0)
   love.graphics.setLineWidth(3)
   local ekg_points = {}
-  local val
+  local val, x, y, peak
   for i=0,#points do
+    x = 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
     table.insert(
       ekg_points,
-      10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
+      x
     )
+
     if i == 0 then
       val = point_queue:peek()
     else
       val = points[i]
     end
-    table.insert(
-      ekg_points,
-      20 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
-    )
+
+    y = 20 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
+    table.insert(ekg_points, y)
+
+    table.insert(ekg_points, x + PIN_SPACING/4)
+    table.insert(ekg_points, y)
+
+    table.insert(ekg_points, x + PIN_SPACING/2)
+    table.insert(ekg_points, y)
+
+    table.insert(ekg_points, x + 3 * PIN_SPACING/4)
+    peak = math.max(val, points[i + 1] or 0)
+    table.insert(ekg_points, 20 + 5 * PIN_SPACING - (peak > 0 and peak + 0.5 or 0) * PIN_DY - RESTING_PIN_OFFSET)
   end
 
   love.graphics.line(ekg_points)
