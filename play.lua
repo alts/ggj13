@@ -22,9 +22,13 @@ function play:keyreleased(k)
   elseif k == 'right' then
     selection_index = (selection_index % #key) + 1
   elseif k == 'up' then
-    player_offsets[selection_index] = player_offsets[selection_index] - 1
+      if player_offsets[selection_index] > -1 then
+        player_offsets[selection_index] = player_offsets[selection_index] - 1
+      end
   elseif k == 'down' then
-    player_offsets[selection_index] = player_offsets[selection_index] + 1
+      if player_offsets[selection_index] < PIN_HEIGHT/PIN_DY - 1 then
+        player_offsets[selection_index] = player_offsets[selection_index] + 1
+      end
   end
 end
 
