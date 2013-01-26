@@ -7,6 +7,7 @@ inspect = require 'lib.inspect.inspect'
 require 'lib.slam'
 
 --love.audio.setVolume(0)
+love.graphics.setBackgroundColor(244, 242, 216)
 
 local Gamestate = require 'lib.hump.gamestate'
 

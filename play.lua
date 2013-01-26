@@ -87,19 +87,22 @@ function play:draw()
     local x = 10 + PIN_SPACING * (i - 1)
     local y = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
     if i == selection_index then
-      love.graphics.setColor(0, 255, 255)
+      love.graphics.setColor(150, 140, 46)
     else
-      love.graphics.setColor(255, 255, 255)
+      love.graphics.setColor(190, 180, 86)
     end
 
-    love.graphics.polygon(
-      'fill',
+    local poly_points = {
       x, y,
       x + PIN_WIDTH, y,
       x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
       x + PIN_WIDTH / 2, y + PIN_HEIGHT,
       x, y + PIN_HEIGHT - PIN_WIDTH / 2
-    )
+    }
+
+    love.graphics.polygon('fill', poly_points)
+    love.graphics.setColor(143, 127, 32)
+    love.graphics.polygon('line', poly_points)
 
     love.graphics.setColor(0, 0, 255)
     love.graphics.rectangle(
@@ -113,6 +116,7 @@ function play:draw()
 
   -- EKG line
   love.graphics.setColor(255, 0, 0)
+  love.graphics.setLineWidth(3)
   local ekg_points = {}
   local val
   for i=0,#points do
@@ -134,11 +138,13 @@ function play:draw()
   love.graphics.line(ekg_points)
 
   -- shear line
-  love.graphics.setColor(255, 0, 0)
+  love.graphics.setColor(88, 86, 131)
+  love.graphics.setLineWidth(2)
   love.graphics.line(
     10, PIN_HEIGHT - PIN_DY,
     10 + PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
   )
+  love.graphics.setLineWidth(1)
 end
 
 return play
