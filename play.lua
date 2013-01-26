@@ -3,13 +3,13 @@ local play = state_manager:register('play')
 
 local key = {1, 5, 3, 2, 1}
 local displacements = {0, 0, 0, 0, 0}
-local tooth_dt = 0.2
+local tooth_dt = 0.5
 local total_time = 0
 local teeth = 0
 
 function play:update(dt)
   total_time = total_time + dt
-  total_time = total_time % 2
+  total_time = total_time % (tooth_dt * 8)
 
   teeth = math.floor(total_time / tooth_dt)
 
@@ -24,32 +24,50 @@ end
 
 
 function play:draw()
-  love.graphics.setColor(255, 255, 255)
   for i=1,5 do
+    local x = 10 + 15 * (i - 1)
+    local y = 40 - displacements[i] * 5
+    love.graphics.setColor(255, 255, 255)
     love.graphics.rectangle(
       'fill',
-      10 + 15 * (i - 1),
-      40 - displacements[i] * 5,
+      x,
+      y,
       10,
       40
     )
+    love.graphics.setColor(0, 0, 255)
+    if i == 3 then
+      love.graphics.rectangle(
+        'fill',
+        x,
+        y,
+        10,
+        key[6 - i] * 5 + 10
+      )
+    else
+      love.graphics.rectangle(
+        'fill',
+        x,
+        y,
+        10,
+        key[6 - i] * 5
+      )
+    end
   end
 
   love.graphics.setColor(0, 255, 0)
   local points = {}
   local dx = 0
   for i=1,20 do
-    local t = ((i - teeth - 1) % #key) + 1
-    table.insert(points, -50 + 15 * (i - 1))
-
-    if math.floor((i - 1 - teeth) / 5) % 2 == 0 then
-      table.insert(points, 80 - key[t] * 5)
-    else
-      table.insert(points, 80)
-    end
+    local t = ((teeth - i - 1) % #key) + 1
+    table.insert(points, 15 + 15 * (i - 1))
+    table.insert(points, 85 - key[t] * 5)
   end
 
   love.graphics.line(points)
+
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.line(10, 40, 80, 40)
 
   --[[
   love.graphics.rectangle('fill', 25, 10, 10, 40)
