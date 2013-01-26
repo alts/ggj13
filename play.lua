@@ -114,7 +114,7 @@ function play:draw()
       val = points[i]
     end
 
-    y = 20 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
+    y = PIN_WIDTH / 2 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
     table.insert(ekg_points, y)
 
     table.insert(ekg_points, x + PIN_SPACING/4)
@@ -125,7 +125,7 @@ function play:draw()
 
     table.insert(ekg_points, x + 3 * PIN_SPACING/4)
     peak = math.max(val, points[i + 1] or 0)
-    table.insert(ekg_points, 20 + 5 * PIN_SPACING - (peak > 0 and peak + 0.5 or 0) * PIN_DY - RESTING_PIN_OFFSET)
+    table.insert(ekg_points, PIN_WIDTH / 2 + 5 * PIN_SPACING - (peak > 0 and peak + 0.5 or 0) * PIN_DY - RESTING_PIN_OFFSET)
   end
 
   love.graphics.line(ekg_points)
@@ -155,11 +155,13 @@ function play:draw()
 
     love.graphics.setColor(0, 0, 255)
     love.graphics.setLineWidth(2)
+    love.graphics.setBlendMode('multiplicative')
     local dy = key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
     love.graphics.line(
       x, y + dy,
       x + PIN_WIDTH, y + dy
     )
+    love.graphics.setBlendMode('alpha')
     love.graphics.setLineWidth(1)
   end
 
@@ -167,8 +169,8 @@ function play:draw()
   love.graphics.setColor(88, 86, 131)
   love.graphics.setLineWidth(2)
   love.graphics.line(
-    10, PIN_HEIGHT - PIN_DY,
-    10 + PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
+    0, PIN_HEIGHT - PIN_DY,
+    PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
   )
   love.graphics.setLineWidth(1)
 end
