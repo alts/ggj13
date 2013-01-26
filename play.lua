@@ -154,13 +154,13 @@ function play:draw()
     love.graphics.polygon('line', poly_points)
 
     love.graphics.setColor(0, 0, 255)
-    love.graphics.rectangle(
-      'fill',
-      x,
-      y,
-      PIN_WIDTH,
-      key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
+    love.graphics.setLineWidth(2)
+    local dy = key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
+    love.graphics.line(
+      x, y + dy,
+      x + PIN_WIDTH, y + dy
     )
+    love.graphics.setLineWidth(1)
   end
 
   -- shear line
