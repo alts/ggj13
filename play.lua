@@ -5,7 +5,7 @@ local key = {4, 2, 3, 5, 1}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local selection_index = 1
-local tooth_dt = 0.5
+local tooth_dt = 0.4
 local total_time = 0
 local teeth = 0
 local rest_time = 5
@@ -93,7 +93,10 @@ function play:draw()
 
   -- shear line
   love.graphics.setColor(255, 0, 0)
-  love.graphics.line(10, PIN_HEIGHT, 10 + PIN_SPACING * 5, PIN_HEIGHT)
+  love.graphics.line(
+    10, PIN_HEIGHT - PIN_DY,
+    10 + PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
+  )
 end
 
 return play
