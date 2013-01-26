@@ -57,13 +57,15 @@ function play:draw()
       love.graphics.setColor(255, 255, 255)
     end
 
-    love.graphics.rectangle(
+    love.graphics.polygon(
       'fill',
-      x,
-      y,
-      PIN_WIDTH,
-      PIN_HEIGHT
+      x, y,
+      x + PIN_WIDTH, y,
+      x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
+      x + PIN_WIDTH / 2, y + PIN_HEIGHT,
+      x, y + PIN_HEIGHT - PIN_WIDTH / 2
     )
+
     love.graphics.setColor(0, 0, 255)
     love.graphics.rectangle(
       'fill',
