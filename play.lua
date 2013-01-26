@@ -96,9 +96,17 @@ end
 
 
 function play:draw()
+  -- shear line
+  love.graphics.setColor(88, 86, 131)
+  love.graphics.setLineWidth(4)
+  love.graphics.line(
+    0, PIN_HEIGHT - PIN_DY,
+    PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
+  )
+
   -- EKG line
   love.graphics.setColor(255, 0, 0)
-  love.graphics.setLineWidth(3)
+  love.graphics.setLineWidth(5)
   local ekg_points = {}
   local val, x, y, peak
   for i=0,#points do
@@ -129,7 +137,6 @@ function play:draw()
   end
 
   love.graphics.line(ekg_points)
-  love.graphics.setLineWidth(1)
 
   -- pins
   for i=1,5 do
@@ -149,12 +156,14 @@ function play:draw()
       x, y + PIN_HEIGHT - PIN_WIDTH / 2
     }
 
+
     love.graphics.polygon('fill', poly_points)
     love.graphics.setColor(143, 127, 32)
+    love.graphics.setLineWidth(2)
     love.graphics.polygon('line', poly_points)
 
     love.graphics.setColor(0, 0, 255)
-    love.graphics.setLineWidth(2)
+    love.graphics.setLineWidth(4)
     love.graphics.setBlendMode('multiplicative')
     local dy = key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
     love.graphics.line(
@@ -162,17 +171,7 @@ function play:draw()
       x + PIN_WIDTH, y + dy
     )
     love.graphics.setBlendMode('alpha')
-    love.graphics.setLineWidth(1)
   end
-
-  -- shear line
-  love.graphics.setColor(88, 86, 131)
-  love.graphics.setLineWidth(2)
-  love.graphics.line(
-    0, PIN_HEIGHT - PIN_DY,
-    PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
-  )
-  love.graphics.setLineWidth(1)
 end
 
 return play
