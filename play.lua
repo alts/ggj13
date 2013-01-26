@@ -1,14 +1,15 @@
 local state_manager = require 'state_manager'
 local play = state_manager:register('play')
 
-local key = {4, 2, 3, 5, 1}
+local key = {3, 5, 1, 4, 2}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local selection_index = 1
-local tooth_dt = 0.4
+local tooth_dt = 0.6
 local total_time = 0
 local teeth = 0
 local rest_time = 5
+local frac = 0
 
 
 function play:keyreleased(k)
@@ -89,9 +90,18 @@ function play:draw()
   love.graphics.setColor(0, 255, 0)
   local points = {}
   local dx = 0
-  for i=1,#key*2 do
+  for i=0,#key*2 do
     local t = ((teeth - i - 1) % #key) + 1
-    table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
+
+    if SMOOTH_PIN_MOVEMENT then
+      table.insert(
+        points,
+        10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
+      )
+    else
+      table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
+    end
+
     local t2 = ((teeth - i - 1) % (#key*2)) + 1
     if t2 > #key then
       table.insert(points, 20 + 5 * PIN_SPACING - RESTING_PIN_OFFSET)
