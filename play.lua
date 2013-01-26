@@ -3,9 +3,24 @@ local play = state_manager:register('play')
 
 local key = {1, 5, 3, 2, 1}
 local displacements = {0, 0, 0, 0, 0}
+local player_offsets = {0, 0, 0, 0, 0}
+local selection_index = 1
 local tooth_dt = 0.5
 local total_time = 0
 local teeth = 0
+
+function play:keyreleased(k)
+  if k == 'left' then
+    selection_index = ((#key + selection_index - 2) % #key) + 1
+  elseif k == 'right' then
+    selection_index = (selection_index % #key) + 1
+  elseif k == 'up' then
+    player_offsets[selection_index] = player_offsets[selection_index] - 1
+  elseif k == 'down' then
+    player_offsets[selection_index] = player_offsets[selection_index] + 1
+  end
+end
+
 
 function play:update(dt)
   total_time = total_time + dt
@@ -27,7 +42,11 @@ function play:draw()
   for i=1,5 do
     local x = 10 + 15 * (i - 1)
     local y = 40 - displacements[i] * 5
-    love.graphics.setColor(255, 255, 255)
+    if i == selection_index then
+      love.graphics.setColor(0, 255, 255)
+    else
+      love.graphics.setColor(255, 255, 255)
+    end
     love.graphics.rectangle(
       'fill',
       x,
@@ -36,23 +55,13 @@ function play:draw()
       40
     )
     love.graphics.setColor(0, 0, 255)
-    if i == 3 then
-      love.graphics.rectangle(
-        'fill',
-        x,
-        y,
-        10,
-        key[6 - i] * 5 + 10
-      )
-    else
-      love.graphics.rectangle(
-        'fill',
-        x,
-        y,
-        10,
-        key[6 - i] * 5
-      )
-    end
+    love.graphics.rectangle(
+      'fill',
+      x,
+      y,
+      10,
+      key[6 - i] * 5 + 5 * player_offsets[i]
+    )
   end
 
   love.graphics.setColor(0, 255, 0)
