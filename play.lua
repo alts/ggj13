@@ -87,7 +87,12 @@ function play:draw()
   for i=1,#key*2 do
     local t = ((teeth - i - 1) % #key) + 1
     table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
-    table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY - RESTING_PIN_OFFSET)
+    local t2 = ((teeth - i - 1) % (#key*2)) + 1
+    if t2 > #key then
+      table.insert(points, 20 + 5 * PIN_SPACING - RESTING_PIN_OFFSET)
+    else
+      table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY - RESTING_PIN_OFFSET)
+    end
   end
 
   love.graphics.line(points)
