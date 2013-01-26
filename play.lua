@@ -100,8 +100,8 @@ function play:draw()
   love.graphics.setColor(88, 86, 131)
   love.graphics.setLineWidth(4)
   love.graphics.line(
-    0, PIN_HEIGHT - PIN_DY,
-    PIN_SPACING * 5, PIN_HEIGHT - PIN_DY
+    0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
+    PIN_SPACING * 5, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
   )
 
   -- EKG line
@@ -122,7 +122,7 @@ function play:draw()
       val = points[i]
     end
 
-    y = PIN_WIDTH / 2 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
+    y = SCREEN_PADDING + PIN_WIDTH / 2 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
     table.insert(ekg_points, y)
 
     table.insert(ekg_points, x + PIN_SPACING/4)
@@ -133,7 +133,7 @@ function play:draw()
 
     table.insert(ekg_points, x + 3 * PIN_SPACING/4)
     peak = math.max(val, points[i + 1] or 0)
-    table.insert(ekg_points, PIN_WIDTH / 2 + 5 * PIN_SPACING - (peak > 0 and peak + 0.5 or 0) * PIN_DY - RESTING_PIN_OFFSET)
+    table.insert(ekg_points, SCREEN_PADDING + PIN_WIDTH / 2 + 5 * PIN_SPACING - (peak > 0 and peak + 0.5 or 0) * PIN_DY - RESTING_PIN_OFFSET)
   end
 
   love.graphics.line(ekg_points)
@@ -141,7 +141,7 @@ function play:draw()
   -- pins
   for i=1,5 do
     local x = 10 + PIN_SPACING * (i - 1)
-    local y = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+    local y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
     if i == selection_index then
       love.graphics.setColor(150, 140, 46)
     else
