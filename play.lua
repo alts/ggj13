@@ -17,7 +17,6 @@ local points = {}
 
 
 function play:enter()
-  print('wat')
   point_queue:init()
   supply_points()
 
@@ -75,7 +74,6 @@ function play:update(dt)
   local size = #key + rest_time
   local next
 
-  print(inspect(points))
   for i=1,#displacements do
     next = points[i - 1] or point_queue:peek()
     displacements[i] = points[i] + frac * (next - points[i])
@@ -114,7 +112,7 @@ function play:draw()
   end
 
   -- EKG line
-  love.graphics.setColor(0, 255, 0)
+  love.graphics.setColor(255, 0, 0)
   local ekg_points = {}
   local val
   for i=0,#points do
