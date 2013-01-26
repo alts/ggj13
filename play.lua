@@ -1,6 +1,8 @@
 local state_manager = require 'state_manager'
 local play = state_manager:register('play')
 
+local SimpleQueue = require 'simple_queue'
+
 local key = {3, 5, 1, 4, 2}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
@@ -10,6 +12,30 @@ local total_time = 0
 local teeth = 0
 local rest_time = 5
 local frac = 0
+local point_queue = create(SimpleQueue)
+local points = {}
+
+
+function play:enter()
+  print('wat')
+  point_queue:init()
+  supply_points()
+
+  for i=1,#key do
+    table.insert(points, 0)
+  end
+end
+
+
+function supply_points()
+  for i=1,#key do
+    point_queue:add(key[i])
+  end
+
+  for i=1, rest_time do
+    point_queue:add(0)
+  end
+end
 
 
 function play:keyreleased(k)
@@ -32,26 +58,27 @@ end
 function play:update(dt)
   total_time = total_time + dt
 
+  if total_time > tooth_dt then
+    total_time = total_time - tooth_dt
+
+    points[#points] = nil
+    table.insert(points, 1, point_queue:pop())
+
+    if point_queue:is_empty() then
+      supply_points()
+    end
+  end
+
   teeth = math.floor(total_time / tooth_dt)
   frac = (total_time % tooth_dt) / tooth_dt
 
   local size = #key + rest_time
-  local disp
+  local next
 
-  for i=1,5 do
-    if SMOOTH_PIN_MOVEMENT then
-      disp = key[((teeth - i - 1) % size) + 1] or 0
-      next_disp = key[((teeth - i) % size) + 1] or 0
-
-      displacements[i] = disp + frac * (next_disp - disp)
-    else
-      disp = key[((teeth - i - 1) % size) + 1]
-      if disp then
-        displacements[i] = disp
-      else
-        displacements[i] = 0
-      end
-    end
+  print(inspect(points))
+  for i=1,#displacements do
+    next = points[i - 1] or point_queue:peek()
+    displacements[i] = points[i] + frac * (next - points[i])
   end
 end
 
@@ -88,29 +115,25 @@ function play:draw()
 
   -- EKG line
   love.graphics.setColor(0, 255, 0)
-  local points = {}
-  local dx = 0
-  for i=0,#key*2 do
-    local t = ((teeth - i - 1) % #key) + 1
-
-    if SMOOTH_PIN_MOVEMENT then
-      table.insert(
-        points,
-        10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
-      )
+  local ekg_points = {}
+  local val
+  for i=0,#points do
+    table.insert(
+      ekg_points,
+      10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
+    )
+    if i == 0 then
+      val = point_queue:peek()
     else
-      table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
+      val = points[i]
     end
-
-    local t2 = ((teeth - i - 1) % (#key*2)) + 1
-    if t2 > #key then
-      table.insert(points, 20 + 5 * PIN_SPACING - RESTING_PIN_OFFSET)
-    else
-      table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY - RESTING_PIN_OFFSET)
-    end
+    table.insert(
+      ekg_points,
+      20 + 5 * PIN_SPACING - val * PIN_DY - RESTING_PIN_OFFSET
+    )
   end
 
-  love.graphics.line(points)
+  love.graphics.line(ekg_points)
 
   -- shear line
   love.graphics.setColor(255, 0, 0)
