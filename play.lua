@@ -8,6 +8,7 @@ local selection_index = 1
 local tooth_dt = 0.5
 local total_time = 0
 local teeth = 0
+local rest_time = 5
 
 -- CONSTANTS
 local PIN_WIDTH = 40
@@ -30,13 +31,15 @@ end
 
 function play:update(dt)
   total_time = total_time + dt
-  total_time = total_time % (tooth_dt * 8)
 
   teeth = math.floor(total_time / tooth_dt)
+  local size = #key + rest_time
+  local disp
 
   for i=1,5 do
-    if key[teeth - i] then
-      displacements[i] = key[teeth - i]
+    disp = key[((teeth - i - 1) % size) + 1]
+    if disp then
+      displacements[i] = disp
     else
       displacements[i] = 0
     end
@@ -48,12 +51,13 @@ function play:draw()
   -- pins
   for i=1,5 do
     local x = 10 + PIN_SPACING * (i - 1)
-    local y = PIN_HEIGHT - displacements[i] * PIN_DY
+    local y = PIN_HEIGHT / 2 - displacements[i] * PIN_DY
     if i == selection_index then
       love.graphics.setColor(0, 255, 255)
     else
       love.graphics.setColor(255, 255, 255)
     end
+
     love.graphics.rectangle(
       'fill',
       x,
@@ -75,7 +79,7 @@ function play:draw()
   love.graphics.setColor(0, 255, 0)
   local points = {}
   local dx = 0
-  for i=1,20 do
+  for i=1,#key*2 do
     local t = ((teeth - i - 1) % #key) + 1
     table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
     table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY)
