@@ -96,6 +96,18 @@ end
 
 
 function play:draw()
+  local x, y = 0, 0
+
+  -- lock innards
+  love.graphics.setColor(194, 184, 89)
+  for i=1,#key do
+    love.graphics.rectangle(
+      'fill',
+      10 + PIN_SPACING * (i - 1) - FILLER_SPACING - FILLER_WIDTH, SCREEN_PADDING,
+      FILLER_WIDTH, PIN_HEIGHT / 4
+    )
+  end
+
   -- shear line
   love.graphics.setColor(88, 86, 131)
   love.graphics.setLineWidth(4)
@@ -108,7 +120,7 @@ function play:draw()
   love.graphics.setColor(255, 0, 0)
   love.graphics.setLineWidth(5)
   local ekg_points = {}
-  local val, x, y, peak
+  local val, peak
   for i=0,#points do
     x = 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
     table.insert(
@@ -140,8 +152,8 @@ function play:draw()
 
   -- pins
   for i=1,5 do
-    local x = 10 + PIN_SPACING * (i - 1)
-    local y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+    x = 10 + PIN_SPACING * (i - 1)
+    y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
     if i == selection_index then
       love.graphics.setColor(150, 140, 46)
     else
