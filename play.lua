@@ -45,6 +45,7 @@ end
 
 
 function play:draw()
+  -- pins
   for i=1,5 do
     local x = 10 + PIN_SPACING * (i - 1)
     local y = PIN_HEIGHT - displacements[i] * PIN_DY
@@ -70,6 +71,7 @@ function play:draw()
     )
   end
 
+  -- EKG line
   love.graphics.setColor(0, 255, 0)
   local points = {}
   local dx = 0
@@ -81,15 +83,9 @@ function play:draw()
 
   love.graphics.line(points)
 
+  -- shear line
   love.graphics.setColor(255, 0, 0)
   love.graphics.line(10, PIN_HEIGHT, 10 + PIN_SPACING * 5, PIN_HEIGHT)
-
-  --[[
-  love.graphics.rectangle('fill', 25, 10, 10, 40)
-  love.graphics.rectangle('fill', 40, 10, 10, 40)
-  love.graphics.rectangle('fill', 55, 10, 10, 40)
-  love.graphics.rectangle('fill', 70, 10, 10, 40)
-  ]]
 end
 
 return play
