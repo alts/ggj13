@@ -14,6 +14,7 @@ local PIN_WIDTH = 40
 local PIN_HEIGHT = 4 * PIN_WIDTH
 local PIN_SPACING = PIN_WIDTH * 1.5
 local PIN_DY = PIN_WIDTH / 2
+local RESTING_PIN_OFFSET = 60
 
 function play:keyreleased(k)
   if k == 'left' then
@@ -48,7 +49,7 @@ function play:draw()
   -- pins
   for i=1,5 do
     local x = 10 + PIN_SPACING * (i - 1)
-    local y = PIN_HEIGHT - displacements[i] * PIN_DY
+    local y = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
     if i == selection_index then
       love.graphics.setColor(0, 255, 255)
     else
@@ -78,7 +79,7 @@ function play:draw()
   for i=1,20 do
     local t = ((teeth - i - 1) % #key) + 1
     table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
-    table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY)
+    table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY - RESTING_PIN_OFFSET)
   end
 
   love.graphics.line(points)
