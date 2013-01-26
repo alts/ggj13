@@ -76,44 +76,26 @@ function play:update(dt)
 
   for i=1,#displacements do
     next = points[i - 1] or point_queue:peek()
-    displacements[i] = points[i] + frac * (next - points[i])
+    if frac > 0.5 then
+      displacements[i] = next
+    elseif frac > 0.25 then
+      local peak = math.max(next, points[i])
+      if peak > 0 then
+        peak = peak + 0.5
+      end
+      displacements[i] = peak + (frac - 0.25) / 0.25 * (next - peak)
+    else
+      local peak = math.max(next, points[i])
+      if peak > 0 then
+        peak = peak + 0.5
+      end
+      displacements[i] = points[i] + frac / 0.25 * (peak - points[i])
+    end
   end
 end
 
 
 function play:draw()
-  -- pins
-  for i=1,5 do
-    local x = 10 + PIN_SPACING * (i - 1)
-    local y = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
-    if i == selection_index then
-      love.graphics.setColor(150, 140, 46)
-    else
-      love.graphics.setColor(190, 180, 86)
-    end
-
-    local poly_points = {
-      x, y,
-      x + PIN_WIDTH, y,
-      x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
-      x + PIN_WIDTH / 2, y + PIN_HEIGHT,
-      x, y + PIN_HEIGHT - PIN_WIDTH / 2
-    }
-
-    love.graphics.polygon('fill', poly_points)
-    love.graphics.setColor(143, 127, 32)
-    love.graphics.polygon('line', poly_points)
-
-    love.graphics.setColor(0, 0, 255)
-    love.graphics.rectangle(
-      'fill',
-      x,
-      y,
-      PIN_WIDTH,
-      key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
-    )
-  end
-
   -- EKG line
   love.graphics.setColor(255, 0, 0)
   love.graphics.setLineWidth(3)
@@ -147,6 +129,39 @@ function play:draw()
   end
 
   love.graphics.line(ekg_points)
+  love.graphics.setLineWidth(1)
+
+  -- pins
+  for i=1,5 do
+    local x = 10 + PIN_SPACING * (i - 1)
+    local y = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+    if i == selection_index then
+      love.graphics.setColor(150, 140, 46)
+    else
+      love.graphics.setColor(190, 180, 86)
+    end
+
+    local poly_points = {
+      x, y,
+      x + PIN_WIDTH, y,
+      x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
+      x + PIN_WIDTH / 2, y + PIN_HEIGHT,
+      x, y + PIN_HEIGHT - PIN_WIDTH / 2
+    }
+
+    love.graphics.polygon('fill', poly_points)
+    love.graphics.setColor(143, 127, 32)
+    love.graphics.polygon('line', poly_points)
+
+    love.graphics.setColor(0, 0, 255)
+    love.graphics.rectangle(
+      'fill',
+      x,
+      y,
+      PIN_WIDTH,
+      key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
+    )
+  end
 
   -- shear line
   love.graphics.setColor(88, 86, 131)
