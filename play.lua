@@ -1,13 +1,19 @@
 local state_manager = require 'state_manager'
 local play = state_manager:register('play')
 
-local key = {1, 5, 3, 2, 1}
+local key = {4, 2, 3, 5, 1}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local selection_index = 1
 local tooth_dt = 0.5
 local total_time = 0
 local teeth = 0
+
+-- CONSTANTS
+local PIN_WIDTH = 40
+local PIN_HEIGHT = 4 * PIN_WIDTH
+local PIN_SPACING = PIN_WIDTH * 1.5
+local PIN_DY = PIN_WIDTH / 2
 
 function play:keyreleased(k)
   if k == 'left' then
@@ -40,8 +46,8 @@ end
 
 function play:draw()
   for i=1,5 do
-    local x = 10 + 15 * (i - 1)
-    local y = 40 - displacements[i] * 5
+    local x = 10 + PIN_SPACING * (i - 1)
+    local y = PIN_HEIGHT - displacements[i] * PIN_DY
     if i == selection_index then
       love.graphics.setColor(0, 255, 255)
     else
@@ -51,16 +57,16 @@ function play:draw()
       'fill',
       x,
       y,
-      10,
-      40
+      PIN_WIDTH,
+      PIN_HEIGHT
     )
     love.graphics.setColor(0, 0, 255)
     love.graphics.rectangle(
       'fill',
       x,
       y,
-      10,
-      key[6 - i] * 5 + 5 * player_offsets[i]
+      PIN_WIDTH,
+      key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
     )
   end
 
@@ -69,14 +75,14 @@ function play:draw()
   local dx = 0
   for i=1,20 do
     local t = ((teeth - i - 1) % #key) + 1
-    table.insert(points, 15 + 15 * (i - 1))
-    table.insert(points, 85 - key[t] * 5)
+    table.insert(points, 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1))
+    table.insert(points, 20 + 5 * PIN_SPACING - key[t] * PIN_DY)
   end
 
   love.graphics.line(points)
 
   love.graphics.setColor(255, 0, 0)
-  love.graphics.line(10, 40, 80, 40)
+  love.graphics.line(10, PIN_HEIGHT, 10 + PIN_SPACING * 5, PIN_HEIGHT)
 
   --[[
   love.graphics.rectangle('fill', 25, 10, 10, 40)
