@@ -32,15 +32,24 @@ function play:update(dt)
   total_time = total_time + dt
 
   teeth = math.floor(total_time / tooth_dt)
+  frac = (total_time % tooth_dt) / tooth_dt
+
   local size = #key + rest_time
   local disp
 
   for i=1,5 do
-    disp = key[((teeth - i - 1) % size) + 1]
-    if disp then
-      displacements[i] = disp
+    if SMOOTH_PIN_MOVEMENT then
+      disp = key[((teeth - i - 1) % size) + 1] or 0
+      next_disp = key[((teeth - i) % size) + 1] or 0
+
+      displacements[i] = disp + frac * (next_disp - disp)
     else
-      displacements[i] = 0
+      disp = key[((teeth - i - 1) % size) + 1]
+      if disp then
+        displacements[i] = disp
+      else
+        displacements[i] = 0
+      end
     end
   end
 end
