@@ -108,6 +108,21 @@ function play:draw()
     )
   end
 
+  -- springs
+  love.graphics.setColor(124, 112, 39)
+  love.graphics.setLineWidth(4)
+  for i=1,#key do
+    local stretch = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+    for j=1,5 do
+      -- draw each segment of the spring
+      love.graphics.line(
+        10 + PIN_SPACING * (i - 1), SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
+        10 + PIN_SPACING * (i - 1) + PIN_WIDTH, SCREEN_PADDING + (j - 1) * (10 + stretch) / 5
+      )
+    end
+  end
+
+
   -- shear line
   love.graphics.setColor(88, 86, 131)
   love.graphics.setLineWidth(4)
