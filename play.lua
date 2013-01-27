@@ -182,8 +182,6 @@ end
 
 
 function play:keyreleased(k)
-  state_manager:switch('win')
-
   local index_offset = first_true(pins) - 1
   local pin_count = #pins - index_offset
 
