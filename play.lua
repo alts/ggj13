@@ -22,8 +22,25 @@ local stages = {
   {
     key = {4, 1, 4, 4, 1},
     pins = {true, true, true, true},
+  },
+  {
+    key = {4, 1, 4, 4, 1},
+    pins = {true, true, true, true},
+  },
+  {
+    key = {4, 1, 4, 4, 1},
+    pins = {true, true, true, true},
+  },
+  {
+    key = {4, 1, 4, 4, 1},
+    pins = {true, true, true, true},
+  },
+  {
+    key = {4, 1, 4, 4, 1},
+    pins = {true, true, true, true},
   }
 }
+gui.stages = stages
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local total_time = 0
@@ -113,9 +130,11 @@ function play:update(dt)
 
   timer_obj:update(dt)
   paper:update(dt)
+  gui:update(dt)
 
   if timer_obj.current_time <= 0 then
     state_manager:switch('slide')
+    gui:move_back()
   end
 
   if total_time > TOOTH_DT then
