@@ -129,7 +129,7 @@ end
 
 
 function play:start_over()
-  current_stage = 2
+  current_stage = 3
   losing_timer = 3
   self:reset()
   gui:start_over()
@@ -219,6 +219,7 @@ function play:update(dt)
 
       if current_stage == #stages then
         sound_bank:get('assets/heartlocker.mp3'):stop()
+        sound_bank:get('assets/approach_flatline.mp3'):play()
         state_manager:switch('win')
       else
         gui:move_forward()

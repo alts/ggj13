@@ -52,7 +52,7 @@ function win:draw()
     )
 
     love.graphics.push()
-    love.graphics.translate(displacement, 0)
+    love.graphics.translate(-displacement, 0)
     paper:draw_shear()
     captured_scene:draw_contents()
     love.graphics.pop()
