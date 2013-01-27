@@ -63,7 +63,7 @@ function play:update(dt)
     points[#points] = nil
     table.insert(points, 1, point_queue:pop())
 
-    if point_queue:is_empty() then
+    if point_queue:size() < #key then
       supply_points()
     end
   end
