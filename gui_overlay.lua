@@ -17,6 +17,11 @@ local overlay_gradient = gradient.vertical(
 local frame_offset = 0
 local direction = nil
 
+
+function gui_overlay:start_over()
+  self.stage = 3
+end
+
 function gui_overlay:move_back()
   self.stage = self.stage - 1
   frame_offset = SCREEN_WIDTH / #self.stages

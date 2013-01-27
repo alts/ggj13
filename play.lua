@@ -107,6 +107,13 @@ function puzzle_success()
 end
 
 
+function play:start_over()
+  current_stage = 3
+  self:reset()
+  gui:start_over()
+end
+
+
 function play:reset()
   winning = false
   winning_timer = 2
@@ -189,7 +196,10 @@ function play:update(dt)
 
   total_time = total_time + dt
 
-  timer_obj:update(dt)
+  if current_stage > 1 then
+    timer_obj:update(dt)
+  end
+
   gui:update(dt)
 
   if timer_obj.current_time <= 0 then
