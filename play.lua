@@ -115,7 +115,6 @@ function play:update(dt)
   paper:update(dt)
 
   if timer_obj.current_time <= 0 then
-    table.insert(points, 0)
     state_manager:switch('slide')
   end
 
@@ -203,11 +202,13 @@ function play:draw_contents()
   love.graphics.setLineWidth(2)
   local ekg_points = {}
   local val, peak
-  for i=-2,#points do
+  for i=-3,#points do
     x = 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
     table.insert(ekg_points, x)
 
-    if i <= 0 then
+    if i <= -3 then
+      val = 0
+    elseif i <= 0 then
       val = point_queue:peek(1 - i) or 0
     else
       val = points[i]

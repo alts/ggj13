@@ -55,8 +55,8 @@ function slide:draw()
   love.graphics.setColor(255, 0, 0)
   love.graphics.setLineWidth(2)
   love.graphics.line(
-    distance < 0 and distance + SCREEN_WIDTH or -200, y,
-    line_width - 200, y
+    distance < 0 and distance + SCREEN_WIDTH or -170, y,
+    line_width - 170, y
   )
   love.graphics.setLineWidth(1)
 end
