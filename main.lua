@@ -19,6 +19,7 @@ local states = {
   'play',
   'slide',
   'slide_forward',
+  'tutorial',
 }
 
 for i = 1, #states do
