@@ -2,6 +2,7 @@ local state_manager = require 'state_manager'
 local play = state_manager:register('play')
 
 local SimpleQueue = require 'simple_queue'
+local timer_obj = require 'timer'
 
 local stages = {
   {
@@ -44,6 +45,7 @@ end
 local selection_index = first_true(pins)
 
 function play:enter()
+  timer_obj:init(stages, 3)
   point_queue:init()
   supply_points()
 
@@ -86,9 +88,10 @@ end
 
 function play:update(dt)
   total_time = total_time + dt
-  timer = timer - dt
 
-  if timer <= 0 then
+  timer_obj:update(dt)
+
+  if timer_obj.current_time <= 0 then
     print('switch to previous pattern')
   end
 
@@ -290,7 +293,7 @@ function play:draw()
     SCREEN_WIDTH, TIMER_HEIGHT
   )
 
-  local timer_progress = math.max(0, timer / max_time)
+  local timer_progress = timer_obj:percent_remaining()
   love.graphics.setColor(255, 255 * timer_progress, 41)
   love.graphics.rectangle(
     'fill',
