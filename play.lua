@@ -69,7 +69,6 @@ end
 
 function play:enter()
   self:reset()
-  print(inspect(points))
 end
 
 
