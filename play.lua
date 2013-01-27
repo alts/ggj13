@@ -207,6 +207,15 @@ function play:draw()
     )
     love.graphics.setBlendMode('alpha')
   end
+
+  -- overview bar
+  love.graphics.setColor(41, 39, 59)
+  love.graphics.rectangle(
+    'fill',
+    0, 0,
+    SCREEN_WIDTH, OVERVIEW_HEIGHT
+  )
+
 end
 
 return play
