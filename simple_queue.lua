@@ -43,11 +43,18 @@ local function peek(self, index)
   return self.items[self.head + index]
 end
 
+
+local function size(self)
+  return self.tail - self.head
+end
+
+
 init(SimpleQueue)
 SimpleQueue.init = init
 SimpleQueue.add = add
 SimpleQueue.is_empty = is_empty
 SimpleQueue.pop = pop
 SimpleQueue.peek = peek
+SimpleQueue.size = size
 
 return SimpleQueue
