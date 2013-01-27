@@ -12,10 +12,11 @@ love.graphics.setBackgroundColor(244, 242, 216)
 local Gamestate = require 'lib.hump.gamestate'
 
 -- game states
-local play_state = require 'play'
+local title_state = require 'title'
 
 -- load other states
 local states = {
+  'play',
   'slide',
   'slide_forward',
 }
@@ -25,4 +26,4 @@ for i = 1, #states do
 end
 
 Gamestate.registerEvents()
-Gamestate.switch(play_state)
+Gamestate.switch(title_state)

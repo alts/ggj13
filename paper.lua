@@ -22,7 +22,7 @@ function paper:update(dt)
 end
 
 
-function paper:draw()
+function paper:draw(hide_shear)
   -- grid lines
   love.graphics.setColor(214, 227, 218)
   love.graphics.setLineWidth(2)
@@ -40,18 +40,19 @@ function paper:draw()
     )
   end
 
-  -- shear line
-
-  if self.winning and winning_timer % 1 < 0.5 then
-    love.graphics.setColor(0, 255, 0)
-  else
-    love.graphics.setColor(88, 86, 131)
+  if not hide_shear then
+    -- shear line
+    if self.winning and winning_timer % 1 < 0.5 then
+      love.graphics.setColor(0, 255, 0)
+    else
+      love.graphics.setColor(88, 86, 131)
+    end
+    love.graphics.setLineWidth(4)
+    love.graphics.line(
+      0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
+      SCREEN_WIDTH, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
+    )
   end
-  love.graphics.setLineWidth(4)
-  love.graphics.line(
-    0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
-    SCREEN_WIDTH, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
-  )
 end
 
 
