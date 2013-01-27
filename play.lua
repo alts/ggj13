@@ -137,8 +137,9 @@ function play:draw()
   love.graphics.translate(120, 0)
 
   -- lock innards
+  -- intentional harcoding
   love.graphics.setColor(194, 184, 89)
-  for i=1,#key + 1 do
+  for i=1,6 do
     love.graphics.rectangle(
       'fill',
       10 + PIN_SPACING * (i - 1) - FILLER_SPACING - FILLER_WIDTH, SCREEN_PADDING,
@@ -211,7 +212,7 @@ function play:draw()
   love.graphics.line(ekg_points)
 
   -- pins
-  for i=1,5 do
+  for i=1,#key do
     x = 10 + PIN_SPACING * (i - 1)
     y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
     if i == selection_index then
@@ -237,7 +238,7 @@ function play:draw()
     love.graphics.setColor(0, 0, 255)
     love.graphics.setLineWidth(4)
     love.graphics.setBlendMode('multiplicative')
-    local dy = key[6 - i] * PIN_DY + PIN_DY * player_offsets[i]
+    local dy = key[#key + 1 - i] * PIN_DY + PIN_DY * player_offsets[i]
     love.graphics.line(
       x, y + dy,
       x + PIN_WIDTH, y + dy
