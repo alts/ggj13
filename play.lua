@@ -216,6 +216,13 @@ function play:draw()
     SCREEN_WIDTH, OVERVIEW_HEIGHT
   )
 
+  -- timer bar
+  love.graphics.setColor(88, 86, 131)
+  love.graphics.rectangle(
+    'fill',
+    0, SCREEN_HEIGHT - TIMER_HEIGHT,
+    SCREEN_WIDTH, TIMER_HEIGHT
+  )
 end
 
 return play
