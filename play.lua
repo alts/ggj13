@@ -67,6 +67,7 @@ local losing_timer = 3
 
 local pin_img = image_bank:get('assets/tumbler.png')
 local music = sound_bank:get('assets/heartlocker.mp3')
+music:setLooping(true)
 
 local lock = gradient.vertical(
   {
@@ -129,7 +130,7 @@ end
 
 
 function play:start_over()
-  current_stage = 3
+  current_stage = #stages
   losing_timer = 3
   self:reset()
   gui:start_over()

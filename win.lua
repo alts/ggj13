@@ -10,7 +10,7 @@ local points = {600,-600,600,-500,250,-200,100,-90,-80,-80,0,0,0,0,0,0,0,0}
 local dx = 0
 
 function win:enter(scene)
-  points = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  points = {0,0,0,0,0,0,0}
   displacement = 0
   dx = 0
   captured_scene = scene
@@ -25,16 +25,26 @@ function win:update(dt)
         table.insert({0, 0})
       end
     end
-  else
-    dx = dx + dt * PIN_SPACING/ TOOTH_DT
-    while dx > PIN_SPACING / 10 do
-      dx = dx - PIN_SPACING / 10
+  end
+
+  if displacement > -SCREEN_WIDTH - 250 then
+    dx = dx + dt * PIN_SPACING / TOOTH_DT
+    while dx > PIN_SPACING / 3 do
+      dx = dx - PIN_SPACING / 3
       if points[1] < 0 then
         table.insert(points, 1, 300)
       else
         table.insert(points, 1, -300)
       end
     end
+  else
+    if points[1] ~= 0 then
+      for i=1,10 do
+        points[i] = 0
+      end
+    end
+
+    dx = dx + dt * PIN_SPACING/ TOOTH_DT
   end
 
   paper:update(dt)
@@ -46,24 +56,28 @@ function win:draw()
   love.graphics.setColor(255, 0, 0)
 
   if displacement > -SCREEN_WIDTH - 250 then
-    love.graphics.line(
-      SCREEN_WIDTH + 250 + displacement, base_y,
-      SCREEN_WIDTH, base_y
-    )
-
     love.graphics.push()
     love.graphics.translate(-displacement, 0)
     paper:draw_shear()
     captured_scene:draw_contents()
     love.graphics.pop()
   else
-    local draw_shit = {}
-    for i=1,#points do
-      table.insert(draw_shit, dx + (i-2)* PIN_SPACING / 10)
-      table.insert(draw_shit, base_y + points[i])
-    end
-    love.graphics.line(draw_shit)
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.line(
+      0, base_y,
+      -displacement - SCREEN_WIDTH - 250, base_y
+    )
   end
+
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.setLineWidth(2)
+  local draw_shit = {}
+  for i=1,#points do
+    table.insert(draw_shit, dx + (i-1)* PIN_SPACING / 3 - 400)
+    table.insert(draw_shit, base_y + points[i])
+  end
+  love.graphics.line(draw_shit)
+  love.graphics.setLineWidth(1)
 
   gui:draw()
 end
