@@ -177,6 +177,12 @@ function play:keyreleased(k)
   local index_offset = first_true(pins) - 1
   local pin_count = #pins - index_offset
 
+  if current_stage == 1 then
+    if k == 'kpenter' or k == 'return' then
+      self:start_over()
+    end
+  end
+
   if k == 'left' then
     selection_index = ((pin_count + selection_index - 2 - index_offset) % pin_count) + 1 + index_offset
   elseif k == 'right' then
