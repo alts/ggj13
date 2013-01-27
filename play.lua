@@ -20,7 +20,7 @@ function play:enter()
   point_queue:init()
   supply_points()
 
-  for i=1,#key do
+  for i=1,#key+2 do
     table.insert(points, 0)
   end
 end
