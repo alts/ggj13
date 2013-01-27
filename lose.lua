@@ -13,6 +13,7 @@ local flatline = sound_bank:get('assets/flatline.mp3')
 flatline:setLooping(true)
 
 function lose:enter(scene)
+  displacement = 0
   captured_scene = scene
   sound_bank:get('assets/approach_flatline.mp3'):stop()
   flatline:play()
