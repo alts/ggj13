@@ -1,5 +1,5 @@
 local timer = {}
-local max_time = 1
+local max_time = 60
 
 function timer:init(stages, stage_index)
   self.failures = {}
