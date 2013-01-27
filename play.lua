@@ -117,7 +117,7 @@ function play:draw()
       -- draw each segment of the spring
       love.graphics.line(
         10 + PIN_SPACING * (i - 1), SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
-        10 + PIN_SPACING * (i - 1) + PIN_WIDTH, SCREEN_PADDING + (j - 1) * (10 + stretch) / 5
+        10 + PIN_SPACING * (i - 1) + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5
       )
     end
   end
