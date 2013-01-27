@@ -28,8 +28,6 @@ local rest_time = 3
 local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
-local max_time = 60
-local timer = 60
 
 local key = stages[3].key
 local pins = stages[3].pins
@@ -134,7 +132,7 @@ function play:update(dt)
 end
 
 
-function play:draw()
+function play:draw_contents()
   local x, y = 0, 0
 
   -- grid lines
@@ -277,7 +275,11 @@ function play:draw()
   end
 
   love.graphics.pop()
+end
 
+
+function play:draw()
+  self:draw_contents()
   gui:draw()
 end
 
