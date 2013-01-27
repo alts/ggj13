@@ -88,7 +88,22 @@ end
 local selection_index = first_true(pins)
 
 
+function flat_win()
+  for i=1,#pins do
+    if pins[i] and player_offsets[i] ~= 1 then
+      return false
+    end
+  end
+
+  return true
+end
+
+
 function puzzle_success()
+  if flat_win() then
+    return false
+  end
+
   for i=1,#pins do
     if pins[i] then
       if i > 1 then
