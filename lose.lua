@@ -3,18 +3,31 @@ local lose = state_manager:register('lose')
 local paper = require 'paper'
 local gui = require 'gui_overlay'
 local image_bank = require 'image_bank'
+local sound_bank = require 'sound_bank'
 
 local img = image_bank:get('assets/ggj_winlose.png')
 local captured_scene
 local displacement = 0
 
+local flatline = sound_bank:get('assets/flatline.mp3')
+flatline:setLooping(true)
+
 function lose:enter(scene)
   captured_scene = scene
+  sound_bank:get('assets/approach_flatline.mp3'):stop()
+  flatline:play()
 end
 
 function lose:update(dt)
   displacement = displacement + dt * PIN_SPACING / TOOTH_DT
   paper:update(dt)
+  --[[
+  if approach:isStopped() then
+    if flatline:isStopped() then
+      flatline:play()
+    end
+  end
+  ]]
 end
 
 function lose:draw()

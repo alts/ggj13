@@ -238,6 +238,10 @@ function play:update(dt)
   end
 
   if timer_obj.current_time <= 0 then
+    if current_stage == 2 then
+      sound_bank:get('assets/approach_flatline.mp3'):play()
+    end
+
     state_manager:switch('slide')
     gui:move_back()
   end
