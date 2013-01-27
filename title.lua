@@ -5,6 +5,15 @@ local image_bank = require 'image_bank'
 
 local img = image_bank:get('assets/ggj_chamber_title.png')
 
+
+function title:enter()
+  heartbeat = love.audio.newSource('assets/heartbeat.mp3')
+  heartbeat:setLooping(true)
+  heartbeat:setVolume(2)
+  love.audio.play(heartbeat)
+end
+
+
 function title:draw()
   paper:draw_background()
   love.graphics.draw(

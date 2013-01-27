@@ -155,6 +155,7 @@ end
 
 
 function play:enter()
+  love.audio.stop(heartbeat)
   self:reset()
 end
 
