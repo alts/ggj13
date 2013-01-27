@@ -7,6 +7,7 @@ local gui = require 'gui_overlay'
 local paper = require 'paper'
 local gradient = require 'gradient'
 local image_bank = require 'image_bank'
+local sound_bank = require 'sound_bank'
 
 local stages = {
   {
@@ -158,7 +159,7 @@ end
 
 
 function play:enter()
-  love.audio.stop(heartbeat)
+  love.audio.stop(sound_bank:get('assets/heartbeat.mp3'))
   self:reset()
 end
 

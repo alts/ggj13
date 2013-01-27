@@ -2,12 +2,13 @@ local state_manager = require 'state_manager'
 local title = state_manager:register('title')
 local paper = require 'paper'
 local image_bank = require 'image_bank'
+local sound_bank = require 'sound_bank'
 
 local img = image_bank:get('assets/ggj_chamber_title.png')
 
 
 function title:enter()
-  heartbeat = love.audio.newSource('assets/heartbeat.mp3')
+  heartbeat = sound_bank:get('assets/heartbeat.mp3')
   heartbeat:setLooping(true)
   heartbeat:setVolume(2)
   love.audio.play(heartbeat)
