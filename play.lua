@@ -71,8 +71,14 @@ local selection_index = first_true(pins)
 function puzzle_success()
   for i=1,#pins do
     if pins[i] then
-      if player_offsets[i] - 1 ~= points[i] then
-        return false
+      if i > 1 then
+        if player_offsets[i] - 1 ~= points[i - 1] then
+          return false
+        end
+      else
+        if player_offsets[i] - 1 ~= point_queue:peek() then
+          return false
+        end
       end
     end
   end
@@ -151,6 +157,7 @@ function play:update(dt)
     if winning_timer <= 0 then
       winning = false
       paper.winning = false
+      gui:move_forward()
       state_manager:switch('slide_forward')
     end
 
@@ -168,6 +175,13 @@ function play:update(dt)
   end
 
   if total_time > TOOTH_DT then
+
+    if puzzle_success() then
+      winning = true
+      paper.winning = true
+      return
+    end
+
     total_time = total_time - TOOTH_DT
 
     points[#points] = nil
@@ -178,17 +192,10 @@ function play:update(dt)
     end
   end
 
-  teeth = math.floor(total_time / TOOTH_DT)
   frac = (total_time % TOOTH_DT) / TOOTH_DT
 
   local size = #key + rest_time
   local next
-
-  if puzzle_success() then
-    winning = true
-    paper.winning = true
-    return
-  end
 
   for i=1,#key do
     next = points[i - 1] or point_queue:peek()

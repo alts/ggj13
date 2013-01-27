@@ -16,6 +16,9 @@ end
 
 
 function gui_overlay:move_forward()
+  self.stage = self.stage + 1
+  frame_offset = -SCREEN_WIDTH / #self.stages
+  direction = 1
 end
 
 
@@ -23,6 +26,11 @@ function gui_overlay:update(dt)
   if direction == -1 then
     frame_offset = frame_offset - SCREEN_WIDTH / (#self.stages * 3) * dt
     if frame_offset <= 0 then
+      direction = nil
+    end
+  elseif direction == 1 then
+    frame_offset = frame_offset + SCREEN_WIDTH / (#self.stages * 3) * dt
+    if frame_offset >= 0 then
       direction = nil
     end
   end
