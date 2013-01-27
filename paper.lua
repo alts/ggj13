@@ -1,9 +1,17 @@
-local paper = {}
+local paper = {
+  winning = false
+}
 
 local total_time = 0
 local progress = 0
+local winning_timer = 3
 
 function paper:update(dt)
+  if self.winning then
+    winning_timer = winning_timer - dt
+    return
+  end
+
   total_time = total_time + dt
 
   if total_time > TOOTH_DT then
@@ -33,7 +41,12 @@ function paper:draw()
   end
 
   -- shear line
-  love.graphics.setColor(88, 86, 131)
+
+  if self.winning and winning_timer % 1 < 0.5 then
+    love.graphics.setColor(0, 255, 0)
+  else
+    love.graphics.setColor(88, 86, 131)
+  end
   love.graphics.setLineWidth(4)
   love.graphics.line(
     0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,

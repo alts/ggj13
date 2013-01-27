@@ -50,6 +50,8 @@ local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
 local current_stage = 3
+local winning = false
+local winning_timer = 2
 
 local key = stages[current_stage].key
 local pins = stages[current_stage].pins
@@ -66,7 +68,23 @@ end
 local selection_index = first_true(pins)
 
 
+function puzzle_success()
+  for i=1,#pins do
+    if pins[i] then
+      if player_offsets[i] - 1 ~= points[i] then
+        return false
+      end
+    end
+  end
+
+  return true
+end
+
+
 function play:reset()
+  winning = false
+  winning_timer = 2
+
   points = {}
   displacements = {0, 0, 0, 0, 0}
   player_offsets = {0, 0, 0, 0, 0}
@@ -114,11 +132,11 @@ function play:keyreleased(k)
   elseif k == 'right' then
     selection_index = ((selection_index - index_offset) % pin_count) + 1 + index_offset
   elseif k == 'up' then
-    if player_offsets[selection_index] + key[#key - selection_index + 1] > 1 then
+    if player_offsets[selection_index] > 0 then
       player_offsets[selection_index] = player_offsets[selection_index] - 1
     end
   elseif k == 'down' then
-    if player_offsets[selection_index] + key[#key - selection_index + 1] < PIN_HEIGHT/PIN_DY - 1 then
+    if player_offsets[selection_index] < PIN_HEIGHT/PIN_DY - 2 then
       player_offsets[selection_index] = player_offsets[selection_index] + 1
     end
   end
@@ -126,10 +144,22 @@ end
 
 
 function play:update(dt)
+  paper:update(dt)
+
+  if winning then
+    winning_timer = winning_timer - dt
+    if winning_timer <= 0 then
+      winning = false
+      paper.winning = false
+      state_manager:switch('slide_forward')
+    end
+
+    return
+  end
+
   total_time = total_time + dt
 
   timer_obj:update(dt)
-  paper:update(dt)
   gui:update(dt)
 
   if timer_obj.current_time <= 0 then
@@ -153,6 +183,12 @@ function play:update(dt)
 
   local size = #key + rest_time
   local next
+
+  if puzzle_success() then
+    winning = true
+    paper.winning = true
+    return
+  end
 
   for i=1,#key do
     next = points[i - 1] or point_queue:peek()
@@ -282,10 +318,15 @@ function play:draw_contents()
       love.graphics.setLineWidth(2)
       love.graphics.polygon('line', poly_points)
 
-      love.graphics.setColor(0, 0, 255)
       love.graphics.setLineWidth(4)
-      love.graphics.setBlendMode('multiplicative')
-      local dy = key[#key + 1 - i] * PIN_DY + PIN_DY * player_offsets[i]
+      if winning and winning_timer % 1 < 0.5 then
+        love.graphics.setColor(0, 255, 0)
+        love.graphics.setBlendMode('alpha')
+      else
+        love.graphics.setColor(0, 0, 255)
+        love.graphics.setBlendMode('multiplicative')
+      end
+      local dy = PIN_DY * (player_offsets[i] + 1)
       love.graphics.line(
         x, y + dy,
         x + PIN_WIDTH, y + dy
