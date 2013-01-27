@@ -130,7 +130,7 @@ end
 
 
 function play:start_over()
-  current_stage = #stages
+  current_stage = 3
   losing_timer = 3
   self:reset()
   gui:start_over()
