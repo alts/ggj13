@@ -21,13 +21,6 @@ end
 function lose:update(dt)
   displacement = displacement + dt * PIN_SPACING / TOOTH_DT
   paper:update(dt)
-  --[[
-  if approach:isStopped() then
-    if flatline:isStopped() then
-      flatline:play()
-    end
-  end
-  ]]
 end
 
 function lose:draw()
