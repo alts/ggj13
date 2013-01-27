@@ -104,7 +104,7 @@ function play:draw()
     love.graphics.rectangle(
       'fill',
       10 + PIN_SPACING * (i - 1) - FILLER_SPACING - FILLER_WIDTH, SCREEN_PADDING,
-      FILLER_WIDTH, PIN_HEIGHT / 4
+      FILLER_WIDTH, FILLER_HEIGHT
     )
   end
 
