@@ -3,8 +3,11 @@ local play = state_manager:register('play')
 
 local SimpleQueue = require 'simple_queue'
 
-local keys = {
-  {3, 5, 1, 4, 2}
+local stages = {
+  {
+    key = {3, 5, 1, 4, 2},
+    pins = {false, true, true},
+  }
 }
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
@@ -19,7 +22,8 @@ local points = {}
 local max_time = 60
 local timer = 60
 
-key = keys[1]
+local key = stages[1].key
+local pins = stages[1].pins
 
 function play:enter()
   point_queue:init()
@@ -84,7 +88,7 @@ function play:update(dt)
   local size = #key + rest_time
   local next
 
-  for i=1,#displacements do
+  for i=1,#key do
     next = points[i - 1] or point_queue:peek()
     if frac > 0.5 then
       displacements[i] = next
@@ -148,24 +152,26 @@ function play:draw()
   end
 
   -- springs
-  for i=1,#key do
-    local stretch = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
-    local x_offset = 10 + PIN_SPACING * (i - 1)
-    for j=1,5 do
-      -- draw each segment of the spring
-      love.graphics.setColor(124, 112, 39)
-      love.graphics.setLineWidth(4)
-      love.graphics.line(
-        x_offset, SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
-        x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5
-      )
+  for i=1,#pins do
+    if pins[i] then
+      local stretch = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+      local x_offset = 10 + PIN_SPACING * (i - 1)
+      for j=1,5 do
+        -- draw each segment of the spring
+        love.graphics.setColor(124, 112, 39)
+        love.graphics.setLineWidth(4)
+        love.graphics.line(
+          x_offset, SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
+          x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5
+        )
 
-      love.graphics.setColor(94, 82, 9)
-      love.graphics.setLineWidth(3)
-      love.graphics.line(
-        x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5,
-        x_offset, SCREEN_PADDING + j * (10 + stretch) / 5
-      )
+        love.graphics.setColor(94, 82, 9)
+        love.graphics.setLineWidth(3)
+        love.graphics.line(
+          x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5,
+          x_offset, SCREEN_PADDING + j * (10 + stretch) / 5
+        )
+      end
     end
   end
 
@@ -212,38 +218,40 @@ function play:draw()
   love.graphics.line(ekg_points)
 
   -- pins
-  for i=1,#key do
-    x = 10 + PIN_SPACING * (i - 1)
-    y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
-    if i == selection_index then
-      love.graphics.setColor(150, 140, 46)
-    else
-      love.graphics.setColor(190, 180, 86)
+  for i=1,#pins do
+    if pins[i] then
+      x = 10 + PIN_SPACING * (i - 1)
+      y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+      if i == selection_index then
+        love.graphics.setColor(150, 140, 46)
+      else
+        love.graphics.setColor(190, 180, 86)
+      end
+
+      local poly_points = {
+        x, y,
+        x + PIN_WIDTH, y,
+        x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
+        x + PIN_WIDTH / 2, y + PIN_HEIGHT,
+        x, y + PIN_HEIGHT - PIN_WIDTH / 2
+      }
+
+
+      love.graphics.polygon('fill', poly_points)
+      love.graphics.setColor(143, 127, 32)
+      love.graphics.setLineWidth(2)
+      love.graphics.polygon('line', poly_points)
+
+      love.graphics.setColor(0, 0, 255)
+      love.graphics.setLineWidth(4)
+      love.graphics.setBlendMode('multiplicative')
+      local dy = key[#key + 1 - i] * PIN_DY + PIN_DY * player_offsets[i]
+      love.graphics.line(
+        x, y + dy,
+        x + PIN_WIDTH, y + dy
+      )
+      love.graphics.setBlendMode('alpha')
     end
-
-    local poly_points = {
-      x, y,
-      x + PIN_WIDTH, y,
-      x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
-      x + PIN_WIDTH / 2, y + PIN_HEIGHT,
-      x, y + PIN_HEIGHT - PIN_WIDTH / 2
-    }
-
-
-    love.graphics.polygon('fill', poly_points)
-    love.graphics.setColor(143, 127, 32)
-    love.graphics.setLineWidth(2)
-    love.graphics.polygon('line', poly_points)
-
-    love.graphics.setColor(0, 0, 255)
-    love.graphics.setLineWidth(4)
-    love.graphics.setBlendMode('multiplicative')
-    local dy = key[#key + 1 - i] * PIN_DY + PIN_DY * player_offsets[i]
-    love.graphics.line(
-      x, y + dy,
-      x + PIN_WIDTH, y + dy
-    )
-    love.graphics.setBlendMode('alpha')
   end
 
   love.graphics.pop()
