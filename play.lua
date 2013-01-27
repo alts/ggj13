@@ -203,10 +203,7 @@ function play:draw()
   local val, peak
   for i=-2,#points do
     x = 10 + PIN_WIDTH / 2 + PIN_SPACING * (i - 1) + frac * PIN_SPACING
-    table.insert(
-      ekg_points,
-      x
-    )
+    table.insert(ekg_points, x)
 
     if i <= 0 then
       val = point_queue:peek(1 - i) or 0
