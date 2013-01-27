@@ -21,6 +21,7 @@ local states = {
   'slide_forward',
   'tutorial',
   'lose',
+  'win',
 }
 
 for i = 1, #states do

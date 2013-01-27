@@ -60,7 +60,7 @@ local rest_time = 3
 local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
-local current_stage = 3
+local current_stage = 2
 local winning = false
 local winning_timer = 2
 local losing_timer = 3
@@ -128,7 +128,7 @@ end
 
 
 function play:start_over()
-  current_stage = 3
+  current_stage = #stages
   losing_timer = 3
   self:reset()
   gui:start_over()
@@ -181,6 +181,8 @@ end
 
 
 function play:keyreleased(k)
+  state_manager:switch('win')
+
   local index_offset = first_true(pins) - 1
   local pin_count = #pins - index_offset
 
@@ -214,9 +216,14 @@ function play:update(dt)
     if winning_timer <= 0 then
       winning = false
       paper.winning = false
-      gui:move_forward()
       points[#points] = 0
-      state_manager:switch('slide_forward')
+
+      if current_stage == #stages then
+        state_manager:switch('win')
+      else
+        gui:move_forward()
+        state_manager:switch('slide_forward')
+      end
     end
 
     return
@@ -394,6 +401,7 @@ function play:draw_contents()
           pin_img,
           x, y
         )
+        love.graphics.setBlendMode('alpha')
       end
 
       love.graphics.setLineWidth(4)
