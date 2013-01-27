@@ -60,7 +60,7 @@ local rest_time = 3
 local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
-local current_stage = 2
+local current_stage = 3
 local winning = false
 local winning_timer = 2
 local losing_timer = 3
@@ -301,6 +301,16 @@ end
 
 function play:draw_contents()
   local x, y = 0, 0
+
+  -- tutorial text, maybe
+  if current_stage <= 3 and current_stage > 1 then
+    love.graphics.setColor(255, 255, 255)
+    local align_img = image_bank:get('assets/alignText.png')
+    love.graphics.draw(
+      align_img,
+      1, SCREEN_PADDING + PIN_WIDTH / 2 + 5 * PIN_SPACING - RESTING_PIN_OFFSET + 20
+    )
+  end
 
   love.graphics.push()
   love.graphics.translate(120, 0)
