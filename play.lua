@@ -100,7 +100,7 @@ function play:draw()
 
   -- lock innards
   love.graphics.setColor(194, 184, 89)
-  for i=1,#key do
+  for i=1,#key + 1 do
     love.graphics.rectangle(
       'fill',
       10 + PIN_SPACING * (i - 1) - FILLER_SPACING - FILLER_WIDTH, SCREEN_PADDING,
