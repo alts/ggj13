@@ -3,7 +3,9 @@ local play = state_manager:register('play')
 
 local SimpleQueue = require 'simple_queue'
 
-local key = {3, 5, 1, 4, 2}
+local keys = {
+  {3, 5, 1, 4, 2}
+}
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
 local selection_index = 1
@@ -17,6 +19,7 @@ local points = {}
 local max_time = 60
 local timer = 60
 
+key = keys[1]
 
 function play:enter()
   point_queue:init()
