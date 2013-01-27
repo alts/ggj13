@@ -37,8 +37,10 @@ local function pop(self)
 end
 
 
-local function peek(self)
-  return self.items[self.head]
+local function peek(self, index)
+  -- preserve indexing from 1
+  index = (index or 1) - 1
+  return self.items[self.head + index]
 end
 
 init(SimpleQueue)
