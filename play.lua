@@ -66,6 +66,7 @@ local winning_timer = 2
 local losing_timer = 3
 
 local pin_img = image_bank:get('assets/tumbler.png')
+local music = sound_bank:get('assets/heartlocker.mp3')
 
 local lock = gradient.vertical(
   {
@@ -219,6 +220,7 @@ function play:update(dt)
       points[#points] = 0
 
       if current_stage == #stages then
+        sound_bank:get('assets/heartlocker.mp3'):stop()
         state_manager:switch('win')
       else
         gui:move_forward()
@@ -241,6 +243,7 @@ function play:update(dt)
 
   if losing_timer <= 0 then
     losing_timer = 3
+    sound_bank:get('assets/heartlocker.mp3'):stop()
     state_manager:switch('lose')
   end
 
