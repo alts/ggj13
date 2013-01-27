@@ -4,6 +4,7 @@ local play = state_manager:register('play')
 local SimpleQueue = require 'simple_queue'
 local timer_obj = require 'timer'
 local gui = require 'gui_overlay'
+local paper = require 'paper'
 
 local stages = {
   {
@@ -21,7 +22,6 @@ local stages = {
 }
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
-local tooth_dt = 0.6
 local total_time = 0
 local teeth = 0
 local rest_time = 3
@@ -43,7 +43,12 @@ end
 
 local selection_index = first_true(pins)
 
-function play:enter()
+
+function play:reset()
+  points = {}
+  displacements = {0, 0, 0, 0, 0}
+  player_offsets = {0, 0, 0, 0, 0}
+
   timer_obj:init(stages, 3)
   point_queue:init()
   supply_points()
@@ -51,6 +56,11 @@ function play:enter()
   for i=1,#key+2 do
     table.insert(points, 0)
   end
+end
+
+
+function play:enter()
+  self:reset()
 end
 
 
@@ -89,13 +99,14 @@ function play:update(dt)
   total_time = total_time + dt
 
   timer_obj:update(dt)
+  paper:update(dt)
 
   if timer_obj.current_time <= 0 then
-    print('switch to previous pattern')
+    state_manager:switch('slide')
   end
 
-  if total_time > tooth_dt then
-    total_time = total_time - tooth_dt
+  if total_time > TOOTH_DT then
+    total_time = total_time - TOOTH_DT
 
     points[#points] = nil
     table.insert(points, 1, point_queue:pop())
@@ -105,8 +116,8 @@ function play:update(dt)
     end
   end
 
-  teeth = math.floor(total_time / tooth_dt)
-  frac = (total_time % tooth_dt) / tooth_dt
+  teeth = math.floor(total_time / TOOTH_DT)
+  frac = (total_time % TOOTH_DT) / TOOTH_DT
 
   local size = #key + rest_time
   local next
@@ -134,31 +145,6 @@ end
 
 function play:draw_contents()
   local x, y = 0, 0
-
-  -- grid lines
-  love.graphics.setColor(214, 227, 218)
-  love.graphics.setLineWidth(2)
-  for i=1,SCREEN_HEIGHT / PIN_DY do
-    love.graphics.line(
-      0, (i - 1) * PIN_DY - 10,
-      SCREEN_WIDTH, (i - 1) * PIN_DY - 10
-    )
-  end
-
-  for i=-1,SCREEN_WIDTH / PIN_DY do
-    love.graphics.line(
-      (i-1) * PIN_DY + frac * PIN_SPACING, 0,
-      (i-1) * PIN_DY + frac * PIN_SPACING, SCREEN_HEIGHT
-    )
-  end
-
-  -- shear line
-  love.graphics.setColor(88, 86, 131)
-  love.graphics.setLineWidth(4)
-  love.graphics.line(
-    0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
-    SCREEN_WIDTH, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
-  )
 
   love.graphics.push()
   love.graphics.translate(120, 0)
@@ -279,6 +265,7 @@ end
 
 
 function play:draw()
+  paper:draw()
   self:draw_contents()
   gui:draw()
 end

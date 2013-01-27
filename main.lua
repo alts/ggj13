@@ -15,7 +15,9 @@ local Gamestate = require 'lib.hump.gamestate'
 local play_state = require 'play'
 
 -- load other states
-local states = {}
+local states = {
+  'slide'
+}
 
 for i = 1, #states do
   require(states[i])
