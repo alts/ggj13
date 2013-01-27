@@ -6,6 +6,7 @@ local timer_obj = require 'timer'
 local gui = require 'gui_overlay'
 local paper = require 'paper'
 local gradient = require 'gradient'
+local image_bank = require 'image_bank'
 
 local stages = {
   {
@@ -62,6 +63,8 @@ local current_stage = 3
 local winning = false
 local winning_timer = 2
 local losing_timer = 3
+
+local pin_img = image_bank:get('assets/tumbler.png')
 
 local lock = gradient.vertical(
   {
@@ -372,25 +375,21 @@ function play:draw_contents()
     if pins[i] then
       x = 10 + PIN_SPACING * (i - 1)
       y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.draw(
+        pin_img,
+        x, y
+      )
+
       if i == selection_index then
-        love.graphics.setColor(230, 220, 126)
-      else
-        love.graphics.setColor(190, 180, 86)
+        love.graphics.setBlendMode('additive')
+        love.graphics.setColor(100, 100, 80)
+        love.graphics.draw(
+          pin_img,
+          x, y
+        )
       end
-
-      local poly_points = {
-        x, y,
-        x + PIN_WIDTH, y,
-        x + PIN_WIDTH, y + PIN_HEIGHT - PIN_WIDTH / 2,
-        x + PIN_WIDTH / 2, y + PIN_HEIGHT,
-        x, y + PIN_HEIGHT - PIN_WIDTH / 2
-      }
-
-
-      love.graphics.polygon('fill', poly_points)
-      love.graphics.setColor(143, 127, 32)
-      love.graphics.setLineWidth(2)
-      love.graphics.polygon('line', poly_points)
 
       love.graphics.setLineWidth(4)
       if winning and winning_timer % 1 < 0.5 then
