@@ -14,6 +14,8 @@ local rest_time = 3
 local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
+local max_time = 60
+local timer = 60
 
 
 function play:enter()
@@ -56,6 +58,11 @@ end
 
 function play:update(dt)
   total_time = total_time + dt
+  timer = timer - dt
+
+  if timer <= 0 then
+    print('switch to previous pattern')
+  end
 
   if total_time > tooth_dt then
     total_time = total_time - tooth_dt
@@ -246,11 +253,19 @@ function play:draw()
   )
 
   -- timer bar
-  love.graphics.setColor(88, 86, 131)
+  love.graphics.setColor(0, 0, 0)
   love.graphics.rectangle(
     'fill',
     0, SCREEN_HEIGHT - TIMER_HEIGHT,
     SCREEN_WIDTH, TIMER_HEIGHT
+  )
+
+  local timer_progress = math.max(0, timer / max_time)
+  love.graphics.setColor(255, 255 * timer_progress, 41)
+  love.graphics.rectangle(
+    'fill',
+    0, SCREEN_HEIGHT - TIMER_HEIGHT,
+    SCREEN_WIDTH * timer_progress, TIMER_HEIGHT
   )
 end
 
