@@ -4,6 +4,15 @@ local gui_overlay = {
 }
 
 local timer = require 'timer'
+local gradient = require 'gradient'
+
+local overlay_gradient = gradient.vertical(
+  {
+    {48, 65, 71},
+    {40, 38, 58}
+  },
+  OVERVIEW_HEIGHT
+)
 
 local frame_offset = 0
 local direction = nil
@@ -42,11 +51,12 @@ function gui_overlay:draw()
   local stage
 
   -- overview bar
-  love.graphics.setColor(41, 39, 59)
-  love.graphics.rectangle(
-    'fill',
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(
+    overlay_gradient,
     0, 0,
-    SCREEN_WIDTH, OVERVIEW_HEIGHT
+    0,
+    SCREEN_WIDTH, 1
   )
 
   love.graphics.setColor(255, 255, 0)

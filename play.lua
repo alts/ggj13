@@ -5,6 +5,7 @@ local SimpleQueue = require 'simple_queue'
 local timer_obj = require 'timer'
 local gui = require 'gui_overlay'
 local paper = require 'paper'
+local gradient = require 'gradient'
 
 local stages = {
   {
@@ -52,6 +53,15 @@ local points = {}
 local current_stage = 3
 local winning = false
 local winning_timer = 2
+
+local lock = gradient.vertical(
+  {
+    {154, 139, 51},
+    {194, 184, 89},
+    {194, 184, 89}
+  },
+  FILLER_HEIGHT
+)
 
 local key = stages[current_stage].key
 local pins = stages[current_stage].pins
@@ -227,12 +237,13 @@ function play:draw_contents()
 
   -- lock innards
   -- intentional harcoding
-  love.graphics.setColor(194, 184, 89)
+  love.graphics.setColor(255, 255, 255)
   for i=1,6 do
-    love.graphics.rectangle(
-      'fill',
+    love.graphics.draw(
+      lock,
       10 + PIN_SPACING * (i - 1) - FILLER_SPACING - FILLER_WIDTH, SCREEN_PADDING,
-      FILLER_WIDTH, FILLER_HEIGHT
+      0,
+      FILLER_WIDTH, 1
     )
   end
 
@@ -263,6 +274,7 @@ function play:draw_contents()
   -- EKG line
   love.graphics.setColor(255, 0, 0)
   love.graphics.setLineWidth(2)
+  love.graphics.setBlendMode('multiplicative')
   local ekg_points = {}
   local val, peak
   for i=-3,#points do
@@ -300,6 +312,7 @@ function play:draw_contents()
   end
 
   love.graphics.line(ekg_points)
+  love.graphics.setBlendMode('alpha')
 
   -- pins
   for i=1,#pins do
