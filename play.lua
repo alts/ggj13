@@ -158,6 +158,7 @@ function play:update(dt)
       winning = false
       paper.winning = false
       gui:move_forward()
+      points[#points] = 0
       state_manager:switch('slide_forward')
     end
 
