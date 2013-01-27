@@ -98,6 +98,17 @@ end
 function play:draw()
   local x, y = 0, 0
 
+  -- shear line
+  love.graphics.setColor(88, 86, 131)
+  love.graphics.setLineWidth(4)
+  love.graphics.line(
+    0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
+    SCREEN_WIDTH, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
+  )
+
+  love.graphics.push()
+  love.graphics.translate(120, 0)
+
   -- lock innards
   love.graphics.setColor(194, 184, 89)
   for i=1,#key + 1 do
@@ -129,15 +140,6 @@ function play:draw()
       )
     end
   end
-
-
-  -- shear line
-  love.graphics.setColor(88, 86, 131)
-  love.graphics.setLineWidth(4)
-  love.graphics.line(
-    0, SCREEN_PADDING + PIN_HEIGHT - PIN_DY,
-    PIN_SPACING * 5, SCREEN_PADDING + PIN_HEIGHT - PIN_DY
-  )
 
   -- EKG line
   love.graphics.setColor(255, 0, 0)
@@ -207,6 +209,8 @@ function play:draw()
     )
     love.graphics.setBlendMode('alpha')
   end
+
+  love.graphics.pop()
 
   -- overview bar
   love.graphics.setColor(41, 39, 59)
