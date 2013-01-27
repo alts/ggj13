@@ -109,15 +109,23 @@ function play:draw()
   end
 
   -- springs
-  love.graphics.setColor(124, 112, 39)
-  love.graphics.setLineWidth(4)
   for i=1,#key do
     local stretch = PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
+    local x_offset = 10 + PIN_SPACING * (i - 1)
     for j=1,5 do
       -- draw each segment of the spring
+      love.graphics.setColor(124, 112, 39)
+      love.graphics.setLineWidth(4)
       love.graphics.line(
-        10 + PIN_SPACING * (i - 1), SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
-        10 + PIN_SPACING * (i - 1) + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5
+        x_offset, SCREEN_PADDING + (j - 1) * (10 + stretch) / 5,
+        x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5
+      )
+
+      love.graphics.setColor(94, 82, 9)
+      love.graphics.setLineWidth(3)
+      love.graphics.line(
+        x_offset + PIN_WIDTH, SCREEN_PADDING + (j - 0.5) * (10 + stretch) / 5,
+        x_offset, SCREEN_PADDING + j * (10 + stretch) / 5
       )
     end
   end
