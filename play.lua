@@ -129,7 +129,7 @@ end
 
 
 function play:start_over()
-  current_stage = #stages
+  current_stage = 2
   losing_timer = 3
   self:reset()
   gui:start_over()
@@ -243,13 +243,13 @@ function play:update(dt)
 
   if losing_timer <= 0 then
     losing_timer = 3
-    sound_bank:get('assets/heartlocker.mp3'):stop()
     state_manager:switch('lose')
   end
 
   if timer_obj.current_time <= 0 then
     if current_stage == 2 then
-      sound_bank:get('assets/approach_flatline.mp3'):play()
+      sound_bank:get('assets/heartlocker.mp3'):stop()
+      sound_bank:get('assets/flatline.mp3'):play()
     end
 
     state_manager:switch('slide')

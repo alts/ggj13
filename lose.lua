@@ -15,7 +15,6 @@ flatline:setLooping(true)
 function lose:enter(scene)
   displacement = 0
   captured_scene = scene
-  sound_bank:get('assets/approach_flatline.mp3'):stop()
   flatline:play()
 end
 
@@ -46,11 +45,9 @@ end
 
 function lose:keyreleased(k)
   if k == 'escape' then
-    sound_bank:get('assets/approach_flatline.mp3'):stop()
     flatline:stop()
     state_manager:switch('title')
   elseif k == 'kpenter' or k == 'return' then
-    sound_bank:get('assets/approach_flatline.mp3'):stop()
     flatline:stop()
     state_manager.states.play:start_over()
     state_manager:switch('play')
