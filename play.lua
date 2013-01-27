@@ -160,7 +160,7 @@ function play:draw()
 
   -- EKG line
   love.graphics.setColor(255, 0, 0)
-  love.graphics.setLineWidth(5)
+  love.graphics.setLineWidth(2)
   local ekg_points = {}
   local val, peak
   for i=-2,#points do
