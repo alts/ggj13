@@ -5,13 +5,20 @@ local SimpleQueue = require 'simple_queue'
 
 local stages = {
   {
-    key = {3, 5, 1, 4, 2},
+    key = {0, 0, 0, 0, 0},
+    pins = {true, true, true, true, true},
+  },
+  {
+    key = {2, 1, 3, 4, 5},
     pins = {false, true, true},
+  },
+  {
+    key = {3, 5, 1, 4, 2},
+    pins = {false, true, true, true},
   }
 }
 local displacements = {0, 0, 0, 0, 0}
 local player_offsets = {0, 0, 0, 0, 0}
-local selection_index = 1
 local tooth_dt = 0.6
 local total_time = 0
 local teeth = 0
@@ -22,8 +29,19 @@ local points = {}
 local max_time = 60
 local timer = 60
 
-local key = stages[1].key
-local pins = stages[1].pins
+local key = stages[3].key
+local pins = stages[3].pins
+
+function first_true(arr)
+  for i=1,#arr do
+    if arr[i] then
+      return i
+    end
+  end
+  return nil
+end
+
+local selection_index = first_true(pins)
 
 function play:enter()
   point_queue:init()
@@ -47,10 +65,13 @@ end
 
 
 function play:keyreleased(k)
+  local index_offset = first_true(pins) - 1
+  local pin_count = #pins - index_offset
+
   if k == 'left' then
-    selection_index = ((#key + selection_index - 2) % #key) + 1
+    selection_index = ((pin_count + selection_index - 2 - index_offset) % pin_count) + 1 + index_offset
   elseif k == 'right' then
-    selection_index = (selection_index % #key) + 1
+    selection_index = ((selection_index - index_offset) % pin_count) + 1 + index_offset
   elseif k == 'up' then
     if player_offsets[selection_index] + key[#key - selection_index + 1] > 1 then
       player_offsets[selection_index] = player_offsets[selection_index] - 1
