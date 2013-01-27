@@ -11,34 +11,42 @@ local stages = {
   {
     key = {0, 0, 0, 0, 0},
     pins = {true, true, true, true, true},
+    rest_period = 5,
+  },
+  {
+    key = {2, 3, 4, 2, 1},
+    pins = {false, true, true},
+    rest_period = 3,
   },
   {
     key = {2, 1, 3, 2, 2},
-    pins = {false, true, true},
+    pins = {false, true, true, true},
+    rest_period = 3,
   },
   {
     key = {3, 5, 1, 4, 2},
     pins = {false, true, true, true},
+    rest_period = 3,
   },
   {
     key = {4, 1, 4, 4, 1},
     pins = {true, true, true, true},
+    rest_period = 2,
   },
   {
-    key = {4, 1, 4, 4, 1},
+    key = {2, 1, 4, 5, 1},
     pins = {true, true, true, true},
+    rest_period = 2,
   },
   {
-    key = {4, 1, 4, 4, 1},
-    pins = {true, true, true, true},
+    key = {4, 3, 5, 1, 2},
+    pins = {true, true, true, true, true},
+    rest_period = 1
   },
   {
-    key = {4, 1, 4, 4, 1},
-    pins = {true, true, true, true},
-  },
-  {
-    key = {4, 1, 4, 4, 1},
-    pins = {true, true, true, true},
+    key = {5, 1, 4, 2, 5},
+    pins = {true, true, true, true, true},
+    rest_period = 1,
   }
 }
 gui.stages = stages
@@ -66,6 +74,7 @@ local lock = gradient.vertical(
 
 local key = stages[current_stage].key
 local pins = stages[current_stage].pins
+local rest_time = stages[current_stage].rest_period
 
 function first_true(arr)
   for i=1,#arr do
@@ -111,6 +120,8 @@ function play:reset()
 
   key = stages[current_stage].key
   pins = stages[current_stage].pins
+  rest_time = stages[current_stage].rest_period
+
   supply_points()
 
   for i=1,#key+2 do
