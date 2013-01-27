@@ -57,6 +57,7 @@ local winning_timer = 2
 local lock = gradient.vertical(
   {
     {154, 139, 51},
+    {154, 139, 51},
     {194, 184, 89},
     {194, 184, 89}
   },
