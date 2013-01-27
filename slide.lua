@@ -24,6 +24,7 @@ function slide:update(dt)
 
   if elapsed_time > 2 then
     if not from_left then
+      state_manager.states.play:switch_stage(-1)
       state_manager.states.play:reset()
       from_left = true
     end

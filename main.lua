@@ -16,7 +16,8 @@ local play_state = require 'play'
 
 -- load other states
 local states = {
-  'slide'
+  'slide',
+  'slide_forward',
 }
 
 for i = 1, #states do

@@ -12,12 +12,16 @@ local stages = {
     pins = {true, true, true, true, true},
   },
   {
-    key = {2, 1, 3, 4, 5},
+    key = {2, 1, 3, 2, 2},
     pins = {false, true, true},
   },
   {
     key = {3, 5, 1, 4, 2},
     pins = {false, true, true, true},
+  },
+  {
+    key = {4, 1, 4, 4, 1},
+    pins = {true, true, true, true},
   }
 }
 local displacements = {0, 0, 0, 0, 0}
@@ -28,9 +32,10 @@ local rest_time = 3
 local frac = 0
 local point_queue = create(SimpleQueue)
 local points = {}
+local current_stage = 3
 
-local key = stages[3].key
-local pins = stages[3].pins
+local key = stages[current_stage].key
+local pins = stages[current_stage].pins
 
 function first_true(arr)
   for i=1,#arr do
@@ -49,8 +54,11 @@ function play:reset()
   displacements = {0, 0, 0, 0, 0}
   player_offsets = {0, 0, 0, 0, 0}
 
-  timer_obj:init(stages, 3)
+  timer_obj:init(stages, current_stage)
   point_queue:init()
+
+  key = stages[current_stage].key
+  pins = stages[current_stage].pins
   supply_points()
 
   for i=1,#key+2 do
@@ -61,16 +69,22 @@ end
 
 function play:enter()
   self:reset()
+  print(inspect(points))
+end
+
+
+function play:switch_stage(di)
+  current_stage = current_stage + di
 end
 
 
 function supply_points()
-  for i=1,#key do
-    point_queue:add(key[i])
-  end
-
   for i=1, rest_time do
     point_queue:add(0)
+  end
+
+  for i=1,#key do
+    point_queue:add(key[i])
   end
 end
 
@@ -102,6 +116,7 @@ function play:update(dt)
   paper:update(dt)
 
   if timer_obj.current_time <= 0 then
+    table.insert(points, 0)
     state_manager:switch('slide')
   end
 
