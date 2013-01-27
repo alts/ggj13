@@ -6,7 +6,7 @@ local image_bank = require 'image_bank'
 local img = image_bank:get('assets/ggj_chamber_tutorial.png')
 
 function tutorial:draw()
-  paper:draw(true)
+  paper:draw_background()
   love.graphics.draw(
     img,
     0, 0
@@ -16,6 +16,7 @@ end
 
 function tutorial:keyreleased(k)
   if k == 'kpenter' or k =='return' then
+    state_manager.states.play:start_over()
     state_manager:switch('play')
   end
 end

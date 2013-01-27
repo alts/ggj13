@@ -61,6 +61,7 @@ local points = {}
 local current_stage = 3
 local winning = false
 local winning_timer = 2
+local losing_timer = 3
 
 local lock = gradient.vertical(
   {
@@ -124,6 +125,7 @@ end
 
 function play:start_over()
   current_stage = 3
+  losing_timer = 3
   self:reset()
   gui:start_over()
 end
@@ -219,9 +221,16 @@ function play:update(dt)
 
   if current_stage > 1 then
     timer_obj:update(dt)
+  else
+    losing_timer = losing_timer - dt
   end
 
   gui:update(dt)
+
+  if losing_timer <= 0 then
+    losing_timer = 3
+    state_manager:switch('lose')
+  end
 
   if timer_obj.current_time <= 0 then
     state_manager:switch('slide')
@@ -363,7 +372,7 @@ function play:draw_contents()
       x = 10 + PIN_SPACING * (i - 1)
       y = SCREEN_PADDING + PIN_HEIGHT - displacements[i] * PIN_DY - RESTING_PIN_OFFSET
       if i == selection_index then
-        love.graphics.setColor(150, 140, 46)
+        love.graphics.setColor(230, 220, 126)
       else
         love.graphics.setColor(190, 180, 86)
       end

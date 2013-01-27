@@ -6,7 +6,7 @@ local image_bank = require 'image_bank'
 local img = image_bank:get('assets/ggj_chamber_title.png')
 
 function title:draw()
-  paper:draw(true)
+  paper:draw_background()
   love.graphics.draw(
     img,
     0, 0
